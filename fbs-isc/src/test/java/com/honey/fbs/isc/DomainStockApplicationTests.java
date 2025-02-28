@@ -1,10 +1,10 @@
-package com.honey.domainpurchases;
+package com.honey.fbs.isc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DomainPurchasesApplicationTests {
+class DomainStockApplicationTests {
 
     @Test
     void contextLoads() {

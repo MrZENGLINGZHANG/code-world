@@ -41,11 +41,10 @@ class FulfilOrderDOMapperTest {
     }
 
     @Test
-    void selectOne() {
+    void selectByOrderId() {
         for (int i = 0; i < 10000; i++) {
             Wrapper<FulfilOrderDO> queryWrapper = Wrappers.<FulfilOrderDO>lambdaQuery()
-                    .eq(FulfilOrderDO::getOrderId, "OR202511245" + i)
-                    .eq(FulfilOrderDO::getShopId, 100001121);
+                    .eq(FulfilOrderDO::getOrderId, "OR202511245" + i);
             FulfilOrderDO orderDO = fulfilOrderDOMapper.selectOne(queryWrapper);
             log.info(orderDO.toString());
         }

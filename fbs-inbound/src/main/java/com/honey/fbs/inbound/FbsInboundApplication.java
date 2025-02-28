@@ -1,4 +1,4 @@
-package com.sh.fbs.gateway;
+package com.honey.fbs.inbound;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class FbsGatewayApplication {
+public class FbsInboundApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FbsGatewayApplication.class, args);
+        SpringApplication.run(FbsInboundApplication.class, args);
     }
 
 }
