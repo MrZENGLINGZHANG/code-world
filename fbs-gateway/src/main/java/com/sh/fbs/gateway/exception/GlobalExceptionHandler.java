@@ -15,9 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.nio.charset.StandardCharsets;
 
 @Configuration
