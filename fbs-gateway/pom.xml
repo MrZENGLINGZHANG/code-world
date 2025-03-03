@@ -67,7 +67,11 @@
             <artifactId>fastjson</artifactId>
             <version>2.0.38</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.lz4</groupId>
+            <artifactId>lz4-java</artifactId>
+            <version>1.8.0</version>
+        </dependency>
         <!-- DEV & Test Tools-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

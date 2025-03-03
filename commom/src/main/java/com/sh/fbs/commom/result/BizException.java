@@ -14,9 +14,9 @@ public class BizException extends RuntimeException {
         this.eCode = eCode;
     }
 
-    public BizException(ErrCode errCode) {
-        super(errCode.getDesc());
-        this.eCode = errCode.getCode();
+    public BizException(BizErrorCode BizErrorCode) {
+        super(BizErrorCode.getMessage());
+        this.eCode = BizErrorCode.getCode();
     }
 
     public int getECode() {

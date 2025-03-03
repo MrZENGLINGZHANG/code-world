@@ -1,15 +1,14 @@
-package com.sh.fbs.gateway.exception;
+package com.sh.fbs.gateway.filters;
 
 import com.alibaba.fastjson.JSON;
 import com.sh.fbs.commom.result.BizException;
-import com.sh.fbs.commom.result.ErrCode;
+import com.sh.fbs.commom.result.BizBaseErrorCode;
 import com.sh.fbs.commom.result.Result;
 import com.sh.fbs.commom.result.ResultUtils;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -29,7 +28,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
             return Mono.error(ex);
         }
         //构建错误结果
-        Result result = ResultUtils.buildResult(ErrCode.FAILED, null);
+        Result result = ResultUtils.buildResult(BizBaseErrorCode.FAILED, null);
         if (ex instanceof BizException) {
             result = ResultUtils.buildResult(((BizException) ex).getECode(), ex.getMessage(), null);
         }
