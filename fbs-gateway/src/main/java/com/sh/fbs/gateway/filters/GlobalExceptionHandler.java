@@ -5,8 +5,10 @@ import com.sh.fbs.commom.result.BizException;
 import com.sh.fbs.commom.result.BizBaseErrorCode;
 import com.sh.fbs.commom.result.Result;
 import com.sh.fbs.commom.result.ResultUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @Configuration
 @Order(-1)
 public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
@@ -27,6 +30,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         if (response.isCommitted()) {
             return Mono.error(ex);
         }
+        log.error(JSON.toJSONString(ex));
         //构建错误结果
         Result result = ResultUtils.buildResult(BizBaseErrorCode.FAILED, null);
         if (ex instanceof BizException) {

@@ -1,44 +1,20 @@
 package com.sh.fbs.gateway.session;
 
+import com.sh.fbs.commom.user.User;
+import lombok.Builder;
 import lombok.Data;
-import java.util.Map;
+import org.springframework.beans.BeanUtils;
 
+@Builder
 @Data
-public class UserSession {
-    private UserInfo userInfo;
-    private Map<Integer,UserLoginInfo> loginInfoMap;
+public class UserSession extends User {
 
-    public boolean isLoggedIn(DeviceType deviceType) {
-        return loginInfoMap.containsKey(deviceType.getCode());
+    private String sessionId;
+    private Long expireTime;
+
+    public User getUser() {
+        User user = new User();
+        BeanUtils.copyProperties(this,user);
+        return user;
     }
-
-    public boolean isLoggedIn(DeviceType deviceType,String sessionId){
-        UserLoginInfo loginInfo = loginInfoMap.get(deviceType.getCode());
-        return loginInfo != null && loginInfo.getSessionId().equals(sessionId);
-    }
-
-    public void logout(DeviceType deviceType){
-        loginInfoMap.remove(deviceType.getCode());
-    }
-
-    public void logout(String sessionId){
-        for (UserLoginInfo userLoginInfo : loginInfoMap.values()) {
-            if(userLoginInfo.getSessionId().equals(sessionId)){
-                loginInfoMap.remove(sessionId);
-                break;
-            }
-        }
-    }
-
-    public UserSession toSimpleDeviceTypeSession(DeviceType deviceType){
-        UserSession userSession = new UserSession();
-        userSession.setUserInfo(userInfo);
-        userSession.setLoginInfoMap(Map.of(deviceType.getCode(),loginInfoMap.get(deviceType.getCode())));
-        return userSession;
-    }
-
-
-
-
-
 }
