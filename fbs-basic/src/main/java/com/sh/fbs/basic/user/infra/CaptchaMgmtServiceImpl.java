@@ -61,7 +61,7 @@ public class CaptchaMgmtServiceImpl implements CaptchaService {
             throw new BizException(BasicAppErrorCode.CAPTCHA_EXPIRED);
         }
         if (param.getCaptcha().equals(captchaMap.get("captcha").toString())) {
-            redisTemplate.opsForHash().delete(getHashKey(param.getUniqKey()),param.getUniqKey());
+           // redisTemplate.opsForHash().delete(getHashKey(param.getUniqKey()),param.getUniqKey());
             return true;
         }
         throw new BizException(BasicAppErrorCode.CAPTCHA_ERROR);

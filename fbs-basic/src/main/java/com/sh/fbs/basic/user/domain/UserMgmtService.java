@@ -17,17 +17,18 @@ public class UserMgmtService {
     private GlobalUserIDGenerator globalUserIDGenerator;
 
     public Long registerUser(UserEntity userEntity) throws Exception{
-        if (userRepo.existsByUsername(userEntity.getUserName())){
-            throw new BizException(BasicAppErrorCode.USER_REGISTER_ERROR.getCode(),String.format(BasicAppErrorCode.USER_REGISTER_ERROR.getMessage(),userEntity.getUserName()));
+        if (userRepo.existsByUsername(userEntity.getUsername())){
+            throw new BizException(BasicAppErrorCode.USER_REGISTER_ERROR.getCode(),String.format(BasicAppErrorCode.USER_REGISTER_ERROR.getMessage(),userEntity.getUsername()));
         }
-        if (userRepo.existsByNickname(userEntity.getNickName())){
-            throw new BizException(BasicAppErrorCode.USER_REGISTER_ERROR.getCode(),String.format(BasicAppErrorCode.USER_REGISTER_ERROR.getMessage(),userEntity.getNickName()));
+        if (userRepo.existsByNickname(userEntity.getNickname())){
+            throw new BizException(BasicAppErrorCode.USER_REGISTER_ERROR.getCode(),String.format(BasicAppErrorCode.USER_REGISTER_ERROR.getMessage(),userEntity.getNickname()));
         }
         if (userRepo.existsByPhone(userEntity.getPhone())){
             throw new BizException(BasicAppErrorCode.USER_REGISTER_ERROR.getCode(),String.format(BasicAppErrorCode.USER_REGISTER_ERROR.getMessage(),userEntity.getPhone()));
         }
         userEntity.setUserId(globalUserIDGenerator.nextID());
-        userEntity.setPwd(MD5Utils.Encrypt(userEntity.getPwd()));
+        String encryptPwd =MD5Utils.encrypt(userEntity.getPwd());
+        userEntity.setPwd(encryptPwd);
         userRepo.save(userEntity);
         return userEntity.getUserId();
     }

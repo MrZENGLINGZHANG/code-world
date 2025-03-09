@@ -13,6 +13,6 @@ public class CaptchaCheckParam {
     @NotNull
     private String uniqKey;
     @NotBlank
-    @Length(min = 6, max = 6)
+    @Length(min = 4, max = 8)
     private String captcha;
 }

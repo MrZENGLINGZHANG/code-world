@@ -3,6 +3,7 @@ package com.sh.fbs.basic.user.infra;
 
 import com.sh.fbs.basic.ObjectReflectFillUtils;
 import com.sh.fbs.basic.user.domain.UserEntity;
+import com.sh.fbs.commom.utils.MD5Utils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +30,14 @@ class UserRepoImplTest {
 
     @Test
     void updateById() {
+       String str1="Yiran2023";
+        String str2="Yiran2023";
+        String st1= MD5Utils.encrypt(str1);
+       String st2= MD5Utils.encrypt(str2);
+
+       if (st1.equals(st2)) {
+           System.out.println("true");
+       }
     }
 
     @Test

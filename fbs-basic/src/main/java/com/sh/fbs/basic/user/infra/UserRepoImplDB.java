@@ -29,7 +29,7 @@ public class UserRepoImplDB implements UserRepo {
     }
     @Override
     public UserEntity findByUsername(String username) {
-        UserDO userDO = userMapper.selectOne(Wrappers.<UserDO>lambdaQuery().eq(UserDO::getUserName, username));
+        UserDO userDO = userMapper.selectOne(Wrappers.<UserDO>lambdaQuery().eq(UserDO::getUsername, username));
         return UserConvertor.convert(userDO);
     }
 
@@ -42,14 +42,14 @@ public class UserRepoImplDB implements UserRepo {
     @Override
     public UserEntity findByNickname(String nickname) {
         // TODO 非sharding Key的点查，全部要基于Redis全局映射转成UserId查询
-        UserDO userDO = userMapper.selectOne(Wrappers.<UserDO>lambdaQuery().eq(UserDO::getNickName, nickname));
+        UserDO userDO = userMapper.selectOne(Wrappers.<UserDO>lambdaQuery().eq(UserDO::getNickname, nickname));
         return UserConvertor.convert(userDO);
     }
 
     @Override
     public boolean existsByUsername(String username) {
         // TODO 因为这里是UserId分片，这里的关于非UserID查询全部走基于Redis的bloomFilter
-        return userMapper.exists(Wrappers.<UserDO>lambdaQuery().eq(UserDO::getUserName, username));
+        return userMapper.exists(Wrappers.<UserDO>lambdaQuery().eq(UserDO::getUsername, username));
 
     }
 
@@ -60,7 +60,7 @@ public class UserRepoImplDB implements UserRepo {
 
     @Override
     public boolean existsByNickname(String nickname) {
-        return userMapper.exists(Wrappers.<UserDO>lambdaQuery().eq(UserDO::getNickName, nickname));
+        return userMapper.exists(Wrappers.<UserDO>lambdaQuery().eq(UserDO::getNickname, nickname));
     }
 
 }
