@@ -7,6 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Slf4j
 @Service
 public class UserMgmtService {
@@ -61,4 +65,75 @@ public class UserMgmtService {
         return userRepo.findByPhone(phone);
     }
 
+    /**
+     * 修改用户密码
+     * @param userId 用户ID
+     * @param oldPassword 原密码
+     * @param newPassword 新密码
+     * @throws Exception 修改密码过程中的异常
+     */
+    public void changePassword(Long userId, String oldPassword, String newPassword) throws Exception {
+        // 获取用户信息
+        UserEntity userEntity = getUserById(userId);
+        if (userEntity == null) {
+            throw new BizException(BasicAppErrorCode.USER_NOT_EXIST);
+        }
+
+        // 验证原密码
+        String encryptedOldPassword = MD5Utils.encrypt(oldPassword.trim());
+        if (!encryptedOldPassword.equals(userEntity.getPwd())) {
+            throw new BizException(BasicAppErrorCode.PASSWORD_ERROR);
+        }
+
+        // 更新新密码
+        userEntity.setPwd(MD5Utils.encrypt(newPassword.trim()));
+        userRepo.updateById(userEntity);
+        
+        log.info("Password changed successfully for user: {}", userId);
+    }
+
+    /**
+     * Update user profile information
+     *
+     * @param userId user ID
+     * @param nickname new nickname
+     * @param phone new phone number
+     * @param icon new icon URL
+     * @param sex new sex value
+     * @param birthDate new birth date
+     * @param area new area
+     * @throws Exception if update fails
+     */
+    public void updateUserProfile(Long userId, String nickname, String phone, 
+                                String icon, int sex, Date birthDate, String area) throws Exception {
+        // 获取用户信息
+        UserEntity userEntity = getUserById(userId);
+        if (userEntity == null) {
+            throw new BizException(BasicAppErrorCode.USER_NOT_EXIST);
+        }
+
+        // 检查手机号是否被其他用户使用
+        if (!phone.equals(userEntity.getPhone()) && userRepo.existsByPhone(phone)) {
+            throw new BizException(BasicAppErrorCode.USER_REGISTER_ERROR.getCode(),
+                    String.format(BasicAppErrorCode.USER_REGISTER_ERROR.getMessage(), phone));
+        }
+
+        // 检查昵称是否被其他用户使用
+        if (!nickname.equals(userEntity.getNickname()) && userRepo.existsByNickname(nickname)) {
+            throw new BizException(BasicAppErrorCode.USER_REGISTER_ERROR.getCode(),
+                    String.format(BasicAppErrorCode.USER_REGISTER_ERROR.getMessage(), nickname));
+        }
+
+        // 更新用户信息
+        userEntity.setNickname(nickname);
+        userEntity.setPhone(phone);
+        userEntity.setIcon(icon);
+        userEntity.setSex(sex);
+        userEntity.setBirthDate(birthDate);
+        userEntity.setArea(area);
+        userEntity.setUpdateTime(new Date());
+
+        userRepo.updateById(userEntity);
+        log.info("User profile updated successfully for user: {}", userId);
+    }
 }

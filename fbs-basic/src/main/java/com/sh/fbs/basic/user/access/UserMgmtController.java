@@ -1,17 +1,22 @@
 package com.sh.fbs.basic.user.access;
 
 import com.sh.fbs.basic.commom.ecode.BasicAppErrorCode;
+import com.sh.fbs.basic.commom.utils.UserContextUtils;
 import com.sh.fbs.basic.user.domain.*;
 import com.sh.fbs.commom.result.BizException;
 import com.sh.fbs.commom.result.Result;
 import com.sh.fbs.commom.result.ResultUtils;
 import com.sh.fbs.commom.utils.MD5Utils;
+import com.sh.fbs.commom.user.User;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * 用户管理控制器
@@ -102,6 +107,63 @@ public class UserMgmtController {
         } catch (Exception e) {
             log.error("Login failed for user: {}", request.getUsername(), e);
             throw new BizException(BasicAppErrorCode.LOGIN_FAILED, e.getMessage());
+        }
+    }
+
+    /**
+     * 修改用户密码
+     */
+    @PostMapping("/change-password")
+    public Result changePassword(@RequestBody @Valid UserChangePasswordRequest request) {
+        User currentUser = UserContextUtils.getCurrentUser();
+        log.info("Process password change for user: {}", currentUser.getUserId());
+        
+        try {
+            // 验证验证码
+            validateCaptcha(currentUser.getPhone(), request.getCaptcha());
+            
+            // 修改密码
+            userMgmtService.changePassword(
+                currentUser.getUserId(),
+                request.getOldPassword(),
+                request.getNewPassword()
+            );
+            
+            return ResultUtils.buildSuccessResult();
+        } catch (BizException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Password change failed for user: {}", currentUser.getUserId(), e);
+            throw new BizException(BasicAppErrorCode.PASSWORD_CHANGE_FAILED, e.getMessage());
+        }
+    }
+
+    /**
+     * 更新用户个人信息
+     */
+    @PostMapping("/update-profile")
+    public Result updateProfile(@RequestBody @Valid UserUpdateProfileRequest request) {
+        User currentUser = UserContextUtils.getCurrentUser();
+        log.info("Process profile update for user: {}", currentUser.getUserId());
+        
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            userMgmtService.updateUserProfile(
+                currentUser.getUserId(),
+                request.getNickname(),
+                request.getPhone(),
+                request.getIcon(),
+                request.getSex(),
+                dateFormat.parse(request.getBirthDateStr()),
+                request.getArea()
+            );
+            
+            return ResultUtils.buildSuccessResult();
+        } catch (BizException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Profile update failed for user: {}", currentUser.getUserId(), e);
+            throw new BizException(BasicAppErrorCode.PROFILE_UPDATE_FAILED, e.getMessage());
         }
     }
 

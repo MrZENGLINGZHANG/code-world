@@ -42,6 +42,10 @@ public enum BasicAppErrorCode implements BizErrorCode {
 
     USER_REGISTER_ERROR(10026,"user register error,%s is already registered"),
 
+    PASSWORD_CHANGE_FAILED(20010, "Failed to change password"),
+    PROFILE_UPDATE_FAILED(20011, "Failed to update user profile"),
+    USER_QUERY_FAILED(20012, "Failed to query user information"),
+
     ;
 
     private final int code;
