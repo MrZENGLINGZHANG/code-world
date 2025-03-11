@@ -7,7 +7,7 @@ import java.util.Map;
 @Getter
 public enum GatewayErrorCode implements BizErrorCode {
 
-
+    SYSTEM_ERROR(500, "System error, please try again later"),
     SESSION_EXPIRED(401,"session expired, please try to refresh token"),
     PARAMS_ERROR(10000,"%s params error or missing"),
     USER_ALREADY_LOGGED_IN(10001,"User already logged in"),
