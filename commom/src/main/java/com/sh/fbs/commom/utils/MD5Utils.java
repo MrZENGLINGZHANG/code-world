@@ -2,7 +2,7 @@ package com.sh.fbs.commom.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
 
 public class MD5Utils {
 
