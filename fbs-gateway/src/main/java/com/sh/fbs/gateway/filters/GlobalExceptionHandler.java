@@ -5,6 +5,7 @@ import com.sh.fbs.commom.result.BizException;
 import com.sh.fbs.commom.result.BizBaseErrorCode;
 import com.sh.fbs.commom.result.Result;
 import com.sh.fbs.commom.result.ResultUtils;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
     @Override
-    public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
+    public Mono<Void> handle(@NotNull ServerWebExchange exchange, Throwable ex) {
         ServerHttpResponse response = exchange.getResponse();
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         if (response.isCommitted()) {
